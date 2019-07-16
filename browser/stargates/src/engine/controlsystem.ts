@@ -12,10 +12,10 @@ export function controlSystem(ents: ReadonlyArray<Entity>){
         if (ent.control && ent.vel && ent.pos) {
             // Left
             if (ent.control.left) {
-                // ent.vel.positional.add(ent.pos.dir.clone().multiplyScalar(-ent.vel.acceleration));
+                ent.vel.positional.add(ent.pos.dir.clone().multiplyScalar(.25));
                 // test change seq
                 // ent.anim = changeSequence(SequenceTypes.attack, ent.anim);
-                ent.vel.rotational.z = 0.1;
+                ent.vel.rotational.z = 0.075;
             }
             else if (!ent.control.right) {
                 ent.vel.rotational.z = 0;
@@ -23,10 +23,10 @@ export function controlSystem(ents: ReadonlyArray<Entity>){
 
             // Right
             if (ent.control.right) {
-                // ent.vel.positional.add(ent.pos.dir.clone().multiplyScalar(ent.vel.acceleration));
+                ent.vel.positional.add(ent.pos.dir.clone().multiplyScalar(-.25));
                 // test change seq
                 // ent.anim = changeSequence(SequenceTypes.walk, ent.anim);
-                ent.vel.rotational.z = -0.1;
+                ent.vel.rotational.z = -0.075;
             }
             else if (!ent.control.left) {
                 ent.vel.rotational.z = 0;

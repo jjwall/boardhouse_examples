@@ -59,7 +59,8 @@ export class GameState extends BaseState {
         player.vel = initializeVelocity(.65);
         player.vel.friction = 0.9;
         // player.anim = initializeAnimation(SequenceTypes.walk, playerAnim);
-        player.hurtBox = initializeHurtBox(player.sprite, HurtBoxTypes.test, 50, 50, -300, -100);
+        // player.hurtBox = initializeHurtBox(player.sprite, HurtBoxTypes.test, 50, 50, -300, -100);
+        player.hurtBox = initializeHurtBox(player.sprite, HurtBoxTypes.test);
         player.timer = initializeTimer(250, () => { 
             // this.removeEntity(player);
             // Remove player sprite from scene.
@@ -72,8 +73,9 @@ export class GameState extends BaseState {
         // Set up enemy entity.
         let enemy = new Entity();
         enemy.pos = initializePosition(300, 100, 4);
-        enemy.sprite = initializeSprite("./data/textures/cottage.png", this.gameScene, 4);
-        enemy.hitBox = initializeHitBox(enemy.sprite, [HurtBoxTypes.test], 50, 50, 100, 200);
+        enemy.sprite = initializeSprite("./data/textures/cottage.png", this.gameScene, 1);
+        // enemy.hitBox = initializeHitBox(enemy.sprite, [HurtBoxTypes.test], 50, 50, 100, 200);
+        enemy.hitBox = initializeHitBox(enemy.sprite, [HurtBoxTypes.test])
         setHitBoxGraphic(enemy.sprite, enemy.hitBox);
         enemy.hitBox.onHit = function() {
             console.log("ouch!");
