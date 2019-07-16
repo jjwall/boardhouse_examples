@@ -12,16 +12,24 @@ export function controlSystem(ents: ReadonlyArray<Entity>){
         if (ent.control && ent.vel && ent.pos) {
             // Left
             if (ent.control.left) {
-                ent.vel.positional.add(ent.pos.dir.clone().multiplyScalar(-ent.vel.acceleration));
+                // ent.vel.positional.add(ent.pos.dir.clone().multiplyScalar(-ent.vel.acceleration));
                 // test change seq
-                ent.anim = changeSequence(SequenceTypes.attack, ent.anim);
+                // ent.anim = changeSequence(SequenceTypes.attack, ent.anim);
+                ent.vel.rotational.z = 0.1;
+            }
+            else if (!ent.control.right) {
+                ent.vel.rotational.z = 0;
             }
 
             // Right
             if (ent.control.right) {
-                ent.vel.positional.add(ent.pos.dir.clone().multiplyScalar(ent.vel.acceleration));
+                // ent.vel.positional.add(ent.pos.dir.clone().multiplyScalar(ent.vel.acceleration));
                 // test change seq
-                ent.anim = changeSequence(SequenceTypes.walk, ent.anim);
+                // ent.anim = changeSequence(SequenceTypes.walk, ent.anim);
+                ent.vel.rotational.z = -0.1;
+            }
+            else if (!ent.control.left) {
+                ent.vel.rotational.z = 0;
             }
 
             // Up
@@ -30,9 +38,9 @@ export function controlSystem(ents: ReadonlyArray<Entity>){
             }
 
             // Down
-            if (ent.control.down) {
-                ent.vel.positional.add(new Vector3(ent.pos.dir.y, -ent.pos.dir.x, -ent.pos.dir.z).multiplyScalar(ent.vel.acceleration));
-            }
+            // if (ent.control.down) {
+            //     ent.vel.positional.add(new Vector3(ent.pos.dir.y, -ent.pos.dir.x, -ent.pos.dir.z).multiplyScalar(ent.vel.acceleration));
+            // }
 
             // Space
             if (ent.control.attack && !ent.control.attacked) {

@@ -54,11 +54,11 @@ export class GameState extends BaseState {
         // Set up player entity.
         let player = new Entity();
         player.pos = initializePosition(150, 150, 5);
-        player.sprite = initializeSprite("./data/textures/msknight.png", this.gameScene, 4);
+        player.sprite = initializeSprite("./data/textures/ship1.png", this.gameScene);
         player.control = initializeControls();
-        player.vel = initializeVelocity(1);
+        player.vel = initializeVelocity(.65);
         player.vel.friction = 0.9;
-        player.anim = initializeAnimation(SequenceTypes.walk, playerAnim);
+        // player.anim = initializeAnimation(SequenceTypes.walk, playerAnim);
         player.hurtBox = initializeHurtBox(player.sprite, HurtBoxTypes.test, 50, 50, -300, -100);
         player.timer = initializeTimer(250, () => { 
             // this.removeEntity(player);
