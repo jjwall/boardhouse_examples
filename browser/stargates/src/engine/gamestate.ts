@@ -1,5 +1,5 @@
 import { initializeAnimation, initializeControls, initializeHitBox, initializeHurtBox, initializeSprite, initializePosition, initializeVelocity, initializeTimer } from "./initializers";
-import { positionSystem, collisionSystem, timerSystem, animationSystem, velocitySystem } from "./coresystems";
+import { positionSystem, collisionSystem, timerSystem, animationSystem, velocitySystem, followSystem } from "./coresystems";
 import { Scene, Camera, Color, WebGLRenderer, OrthographicCamera } from "three";
 import { setHurtBoxGraphic, playAudio, setHitBoxGraphic } from "./helpers";
 import { HurtBoxTypes, SequenceTypes } from "./enums";
@@ -48,6 +48,7 @@ export class GameState extends BaseState {
         this.registerSystem(animationSystem);
         this.registerSystem(timerSystem);
         this.registerSystem(positionSystem);
+        this.registerSystem(followSystem);
 
         playAudio("./data/audio/Pale_Blue.mp3", 0.3, true);
 
@@ -73,9 +74,11 @@ export class GameState extends BaseState {
         // Set up enemy entity.
         let enemy = new Entity();
         enemy.pos = initializePosition(300, 100, 4);
+        enemy.vel = initializeVelocity(4);
         enemy.sprite = initializeSprite("./data/textures/cottage.png", this.gameScene, 1);
         // enemy.hitBox = initializeHitBox(enemy.sprite, [HurtBoxTypes.test], 50, 50, 100, 200);
         enemy.hitBox = initializeHitBox(enemy.sprite, [HurtBoxTypes.test])
+        enemy.followsEntity = { entityToFollow: player };
         setHitBoxGraphic(enemy.sprite, enemy.hitBox);
         enemy.hitBox.onHit = function() {
             console.log("ouch!");

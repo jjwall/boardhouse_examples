@@ -7,6 +7,13 @@ import { AnimationSchema } from "./engineinterfaces";
 import { HurtBoxTypes, SequenceTypes } from "./enums";
 
 /**
+ * Follow component.
+ */
+export interface FollowComponent {
+    entityToFollow: Entity;
+}
+
+/**
  * Position component.
  */
 export interface PositionComponent {
