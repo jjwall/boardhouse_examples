@@ -101,10 +101,53 @@ export class GameState extends BaseState {
         }
         this.registerEntity(gate);
 
+        this.setUpGateSpawner();
         this.setUpEnemySpawner(1260, 700, player);
         this.setUpEnemySpawner(20, 700, player);
         this.setUpEnemySpawner(1260, 20, player);
         this.setUpEnemySpawner(20, 20, player);
+    }
+
+    private setUpGateSpawner() {
+        let spawner = new Entity();
+        
+        spawner.spawner = { spawnEntity: (): Entity => {
+            let gate = new Entity();
+            const randomYVal = Math.floor(Math.random() * (700 - 0 + 1)) + 0;
+            const randomXVal = Math.floor(Math.random() * (1260 - 0 + 1)) + 0;
+            let randomXVec = Math.floor(Math.random() * (2 - 0 + 1)) + 0;
+            randomXVec *= Math.floor(Math.random()*2) == 1 ? 1 : -1;
+            let randomYVec = Math.floor(Math.random() * (2 - 0 + 1)) + 0;
+            randomYVec *= Math.floor(Math.random()*2) == 1 ? 1 : -1;
+            gate.pos = initializePosition(randomXVal, randomYVal, 5);
+            gate.sprite = initializeSprite("./data/textures/gate.png", this.gameScene, 2);
+            gate.vel = initializeVelocity(.3, new Vector3(randomXVec, randomYVec, 0));
+            gate.hitBox = initializeHitBox(gate.sprite, [HurtBoxTypes.player]);
+            gate.hitBox.onHit = () => {
+                console.log("yay!");
+
+                let explosion = new Entity();
+                explosion.pos = gate.pos;
+                explosion.sprite = initializeSprite("./data/textures/explosion.png", this.gameScene, 2);
+                explosion.hitBox = initializeHitBox(explosion.sprite, [HurtBoxTypes.enemy]);
+                explosion.timer = initializeTimer(25, () => {
+                    this.removeEntity(explosion);
+                    // Remove Explosion from scene.
+                    this.gameScene.remove(explosion.sprite);
+                });
+
+                this.registerEntity(explosion);
+
+                this.rootComponent.addClick();
+                this.removeEntity(gate);
+                // Remove gate sprite from scene.
+                this.gameScene.remove(gate.sprite);
+            }
+
+            return gate;
+        }}
+        
+        this.registerEntity(spawner);
     }
 
     private setUpEnemySpawner(xPos: number, yPos: number, player: Entity) {
