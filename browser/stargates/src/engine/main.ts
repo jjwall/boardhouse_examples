@@ -33,6 +33,8 @@ loadTextures([
     "./data/textures/snow.png",
     "./data/textures/ship1.png",
     "./data/textures/enemy.png",
+    "./data/textures/gate.png",
+    "./data/textures/explosion.png",
 ]).then((textures) => {
     // cache off textures
     Resources.instance.setTextures(textures);

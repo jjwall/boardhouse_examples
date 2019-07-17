@@ -1,6 +1,6 @@
 import { initializeAnimation, initializeControls, initializeHitBox, initializeHurtBox, initializeSprite, initializePosition, initializeVelocity, initializeTimer } from "./initializers";
 import { positionSystem, collisionSystem, timerSystem, animationSystem, velocitySystem, followSystem, spawnerSystem } from "./coresystems";
-import { Scene, Camera, Color, WebGLRenderer, OrthographicCamera } from "three";
+import { Scene, Camera, Color, WebGLRenderer, OrthographicCamera, Vector2, Vector3 } from "three";
 import { setHurtBoxGraphic, playAudio, setHitBoxGraphic } from "./helpers";
 import { HurtBoxTypes, SequenceTypes } from "./enums";
 import { controlSystem } from "./controlsystem";
@@ -63,7 +63,7 @@ export class GameState extends BaseState {
         player.vel.friction = 0.9;
         // player.anim = initializeAnimation(SequenceTypes.walk, playerAnim);
         // player.hurtBox = initializeHurtBox(player.sprite, HurtBoxTypes.test, 50, 50, -300, -100);
-        player.hurtBox = initializeHurtBox(player.sprite, HurtBoxTypes.test);
+        player.hurtBox = initializeHurtBox(player.sprite, HurtBoxTypes.player);
         player.timer = initializeTimer(250, () => { 
             // this.removeEntity(player);
             // Remove player sprite from scene.
@@ -73,6 +73,33 @@ export class GameState extends BaseState {
         // setHurtBoxGraphic(player.sprite, player.hurtBox);
         
         this.registerEntity(player);
+
+        let gate = new Entity();
+        gate.pos = initializePosition(300, 150, 5);
+        gate.sprite = initializeSprite("./data/textures/gate.png", this.gameScene, 2);
+        gate.vel = initializeVelocity(.3, new Vector3(2, 1, 0));
+        gate.hitBox = initializeHitBox(gate.sprite, [HurtBoxTypes.player]);
+        gate.hitBox.onHit = () => {
+            console.log("yay!");
+
+            let explosion = new Entity();
+            explosion.pos = gate.pos;
+            explosion.sprite = initializeSprite("./data/textures/explosion.png", this.gameScene, 2);
+            explosion.hitBox = initializeHitBox(explosion.sprite, [HurtBoxTypes.enemy]);
+            explosion.timer = initializeTimer(25, () => {
+                this.removeEntity(explosion);
+                // Remove Explosion from scene.
+                this.gameScene.remove(explosion.sprite);
+            });
+
+            this.registerEntity(explosion);
+
+            this.rootComponent.addClick();
+            this.removeEntity(gate);
+            // Remove gate sprite from scene.
+            this.gameScene.remove(gate.sprite);
+        }
+        this.registerEntity(gate);
 
         this.setUpEnemySpawner(1260, 700, player);
         this.setUpEnemySpawner(20, 700, player);
@@ -89,12 +116,18 @@ export class GameState extends BaseState {
             enemy.vel = initializeVelocity(4);
             enemy.sprite = initializeSprite("./data/textures/enemy.png", this.gameScene, 2);
             // enemy.hitBox = initializeHitBox(enemy.sprite, [HurtBoxTypes.test], 50, 50, 100, 200);
-            enemy.hitBox = initializeHitBox(enemy.sprite, [HurtBoxTypes.test])
+            enemy.hitBox = initializeHitBox(enemy.sprite, [HurtBoxTypes.player]);
+            enemy.hurtBox = initializeHurtBox(enemy.sprite, HurtBoxTypes.enemy);
             enemy.followsEntity = { entityToFollow: player };
             // setHitBoxGraphic(enemy.sprite, enemy.hitBox);
             enemy.hitBox.onHit = () => {
                 console.log("ouch!");
                 this.rootComponent.addClick();
+            }
+            enemy.hurtBox.onHurt = () => {
+                this.removeEntity(enemy);
+                // Remove Enemy from scene.
+                this.gameScene.remove(enemy.sprite);
             }
 
             return enemy;
