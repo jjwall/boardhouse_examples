@@ -4,6 +4,7 @@ import {
 } from "three";
 import { Entity } from "./entity";
 import { Resources } from "../resourcemanager";
+import { BaseState } from "../basestate";
 
 /**
  * Rudimentary velocity implementation... will replace directions with
@@ -122,4 +123,17 @@ export function followSystem(ents: ReadonlyArray<Entity>) {
             ent.pos.loc.y += Math.sin(angle) * ent.vel.acceleration;
         }
     })
+}
+
+export function spawnerSystem(ents: ReadonlyArray<Entity>, state: BaseState) {
+    ents.forEach(ent => {
+        if (ent.spawner) {
+            // update random number somewhere...
+            const randomNum = Math.floor(Math.random() * (750 - 0 + 1)) + 0;
+
+            if (randomNum === 15 || randomNum === 67) {
+                state.registerEntity(ent.spawner.spawnEntity());
+            }
+        }
+    });
 }

@@ -1,4 +1,4 @@
-import { PositionComponent, VelocityComponent, AnimationComponent, HitBoxComponent, HurtBoxComponent, TimerComponent, FollowComponent } from "./corecomponents";
+import { PositionComponent, VelocityComponent, AnimationComponent, HitBoxComponent, HurtBoxComponent, TimerComponent, FollowComponent, SpawnerComponent } from "./corecomponents";
 import { ControlComponent } from "./controlcomponent";
 import { Mesh } from "three";
 
@@ -17,5 +17,6 @@ export class Entity {
      public hitBox: HitBoxComponent;
      public hurtBox: HurtBoxComponent;
      public timer: TimerComponent;
+     public spawner: SpawnerComponent;
      public followsEntity: FollowComponent;
 }

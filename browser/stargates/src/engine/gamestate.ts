@@ -1,5 +1,5 @@
 import { initializeAnimation, initializeControls, initializeHitBox, initializeHurtBox, initializeSprite, initializePosition, initializeVelocity, initializeTimer } from "./initializers";
-import { positionSystem, collisionSystem, timerSystem, animationSystem, velocitySystem, followSystem } from "./coresystems";
+import { positionSystem, collisionSystem, timerSystem, animationSystem, velocitySystem, followSystem, spawnerSystem } from "./coresystems";
 import { Scene, Camera, Color, WebGLRenderer, OrthographicCamera } from "three";
 import { setHurtBoxGraphic, playAudio, setHitBoxGraphic } from "./helpers";
 import { HurtBoxTypes, SequenceTypes } from "./enums";
@@ -48,6 +48,7 @@ export class GameState extends BaseState {
         this.registerSystem(animationSystem);
         this.registerSystem(timerSystem);
         this.registerSystem(positionSystem);
+        this.registerSystem(spawnerSystem);
         this.registerSystem(followSystem);
 
         playAudio("./data/audio/Pale_Blue.mp3", 0.3, true);
@@ -99,11 +100,31 @@ export class GameState extends BaseState {
         }
 
         this.registerEntity(enemy);
-        this.registerEntity(enemy1);
+        // this.registerEntity(enemy1);
+
+        let spawner1 = new Entity();
+        spawner1.spawner = { spawnEntity: (): Entity => {
+            let enemy1 = new Entity();
+            enemy1.pos = initializePosition(1000, 500, 4);
+            enemy1.vel = initializeVelocity(4);
+            enemy1.sprite = initializeSprite("./data/textures/cottage.png", this.gameScene, 1);
+            // enemy.hitBox = initializeHitBox(enemy.sprite, [HurtBoxTypes.test], 50, 50, 100, 200);
+            enemy1.hitBox = initializeHitBox(enemy1.sprite, [HurtBoxTypes.test])
+            enemy1.followsEntity = { entityToFollow: player };
+            setHitBoxGraphic(enemy1.sprite, enemy1.hitBox);
+            enemy1.hitBox.onHit = function() {
+                console.log("ouch!");
+                rootComponent.addClick();
+            }
+            
+            return enemy1;
+        }};
+        this.registerEntity(spawner1);
+
     }
 
     public update() : void {
-        this.runSystems();
+        this.runSystems(this);
     }
 
     public render(renderer: WebGLRenderer) : void {

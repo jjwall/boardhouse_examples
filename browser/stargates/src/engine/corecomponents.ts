@@ -7,6 +7,14 @@ import { AnimationSchema } from "./engineinterfaces";
 import { HurtBoxTypes, SequenceTypes } from "./enums";
 
 /**
+ * Spawner component.
+ */
+export interface SpawnerComponent {
+    spawnEntity: () => Entity;
+}
+
+
+/**
  * Follow component.
  */
 export interface FollowComponent {

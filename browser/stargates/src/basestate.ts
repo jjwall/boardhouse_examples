@@ -53,7 +53,7 @@ export abstract class BaseState {
      * and every specific registry for each ecsKey component match.
      * @param ent 
      */
-    protected registerEntity<E>(ent: E) {
+    public registerEntity<E>(ent: E) {
         let entityComponents: Array<string> = [];
 
         for (var component in ent) {
@@ -120,11 +120,11 @@ export abstract class BaseState {
     /**
      * Should be called by the state's update method.
      */
-    protected runSystems() {
+    protected runSystems(state: BaseState) {
         this.systemRegistry.forEach(systemMap => {
             const key = Object.keys(systemMap)[0];
 
-            systemMap[key](this.entityRegistry[key], this);
+            systemMap[key](this.entityRegistry[key], state);
         });
     }
 }
