@@ -70,57 +70,36 @@ export class GameState extends BaseState {
             // this.stateStack.pop();
         });
         setHurtBoxGraphic(player.sprite, player.hurtBox);
+        
         this.registerEntity(player);
 
-        // Set up enemy entity.
-        let enemy = new Entity();
-        enemy.pos = initializePosition(300, 100, 4);
-        enemy.vel = initializeVelocity(4);
-        enemy.sprite = initializeSprite("./data/textures/cottage.png", this.gameScene, 1);
-        // enemy.hitBox = initializeHitBox(enemy.sprite, [HurtBoxTypes.test], 50, 50, 100, 200);
-        enemy.hitBox = initializeHitBox(enemy.sprite, [HurtBoxTypes.test])
-        enemy.followsEntity = { entityToFollow: player };
-        setHitBoxGraphic(enemy.sprite, enemy.hitBox);
-        enemy.hitBox.onHit = function() {
-            console.log("ouch!");
-            rootComponent.addClick();
-        }
+        this.setUpEnemySpawner(1260, 700, player);
+        this.setUpEnemySpawner(20, 700, player);
+        this.setUpEnemySpawner(1260, 20, player);
+        this.setUpEnemySpawner(20, 20, player);
+    }
 
-        let enemy1 = new Entity();
-        enemy1.pos = initializePosition(1000, 500, 4);
-        enemy1.vel = initializeVelocity(4);
-        enemy1.sprite = initializeSprite("./data/textures/cottage.png", this.gameScene, 1);
-        // enemy.hitBox = initializeHitBox(enemy.sprite, [HurtBoxTypes.test], 50, 50, 100, 200);
-        enemy1.hitBox = initializeHitBox(enemy1.sprite, [HurtBoxTypes.test])
-        enemy1.followsEntity = { entityToFollow: player };
-        setHitBoxGraphic(enemy1.sprite, enemy1.hitBox);
-        enemy1.hitBox.onHit = function() {
-            console.log("ouch!");
-            rootComponent.addClick();
-        }
+    private setUpEnemySpawner(xPos: number, yPos: number, player: Entity) {
+        let spawner = new Entity();
 
-        this.registerEntity(enemy);
-        // this.registerEntity(enemy1);
-
-        let spawner1 = new Entity();
-        spawner1.spawner = { spawnEntity: (): Entity => {
-            let enemy1 = new Entity();
-            enemy1.pos = initializePosition(1000, 500, 4);
-            enemy1.vel = initializeVelocity(4);
-            enemy1.sprite = initializeSprite("./data/textures/cottage.png", this.gameScene, 1);
+        spawner.spawner = { spawnEntity: (): Entity => {
+            let enemy = new Entity();
+            enemy.pos = initializePosition(xPos, yPos, 4);
+            enemy.vel = initializeVelocity(4);
+            enemy.sprite = initializeSprite("./data/textures/cottage.png", this.gameScene);
             // enemy.hitBox = initializeHitBox(enemy.sprite, [HurtBoxTypes.test], 50, 50, 100, 200);
-            enemy1.hitBox = initializeHitBox(enemy1.sprite, [HurtBoxTypes.test])
-            enemy1.followsEntity = { entityToFollow: player };
-            setHitBoxGraphic(enemy1.sprite, enemy1.hitBox);
-            enemy1.hitBox.onHit = function() {
+            enemy.hitBox = initializeHitBox(enemy.sprite, [HurtBoxTypes.test])
+            enemy.followsEntity = { entityToFollow: player };
+            setHitBoxGraphic(enemy.sprite, enemy.hitBox);
+            enemy.hitBox.onHit = function() {
                 console.log("ouch!");
-                rootComponent.addClick();
+                // rootComponent.addClick();
             }
-            
-            return enemy1;
-        }};
-        this.registerEntity(spawner1);
 
+            return enemy;
+        }};
+
+        this.registerEntity(spawner);
     }
 
     public update() : void {
