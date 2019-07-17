@@ -22,6 +22,7 @@ export class GameState extends BaseState {
     public uiScene: Scene;
     public uiCamera: Camera;
     public rootWidget: Widget;
+    public rootComponent: Root;
     constructor(stateStack: BaseState[]) {
         super(stateStack);
         // Set up game scene.
@@ -39,7 +40,7 @@ export class GameState extends BaseState {
 
         // Set up ui widget and instance.
         this.rootWidget = createWidget("root");
-        let rootComponent = renderGameUi(this.uiScene, this.rootWidget);
+        this.rootComponent = renderGameUi(this.uiScene, this.rootWidget);
 
         // Register systems.
         this.registerSystem(controlSystem, "control");
@@ -51,7 +52,7 @@ export class GameState extends BaseState {
         this.registerSystem(spawnerSystem);
         this.registerSystem(followSystem);
 
-        playAudio("./data/audio/Pale_Blue.mp3", 0.3, true);
+        // playAudio("./data/audio/Pale_Blue.mp3", 0.3, true);
 
         // Set up player entity.
         let player = new Entity();
@@ -69,7 +70,7 @@ export class GameState extends BaseState {
             // this.gameScene.remove(player.sprite);
             // this.stateStack.pop();
         });
-        setHurtBoxGraphic(player.sprite, player.hurtBox);
+        // setHurtBoxGraphic(player.sprite, player.hurtBox);
         
         this.registerEntity(player);
 
@@ -86,14 +87,14 @@ export class GameState extends BaseState {
             let enemy = new Entity();
             enemy.pos = initializePosition(xPos, yPos, 4);
             enemy.vel = initializeVelocity(4);
-            enemy.sprite = initializeSprite("./data/textures/cottage.png", this.gameScene);
+            enemy.sprite = initializeSprite("./data/textures/enemy.png", this.gameScene, 2);
             // enemy.hitBox = initializeHitBox(enemy.sprite, [HurtBoxTypes.test], 50, 50, 100, 200);
             enemy.hitBox = initializeHitBox(enemy.sprite, [HurtBoxTypes.test])
             enemy.followsEntity = { entityToFollow: player };
-            setHitBoxGraphic(enemy.sprite, enemy.hitBox);
-            enemy.hitBox.onHit = function() {
+            // setHitBoxGraphic(enemy.sprite, enemy.hitBox);
+            enemy.hitBox.onHit = () => {
                 console.log("ouch!");
-                // rootComponent.addClick();
+                this.rootComponent.addClick();
             }
 
             return enemy;
