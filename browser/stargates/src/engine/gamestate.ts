@@ -111,13 +111,13 @@ export class GameState extends BaseState {
     private setUpGateSpawner() {
         let spawner = new Entity();
         
-        spawner.spawner = { spawnEntity: (): Entity => {
+        spawner.spawner = { randomNumber: 150, spawnEntity: (): Entity => {
             let gate = new Entity();
             const randomYVal = Math.floor(Math.random() * (700 - 0 + 1)) + 0;
             const randomXVal = Math.floor(Math.random() * (1260 - 0 + 1)) + 0;
-            let randomXVec = Math.floor(Math.random() * (2 - 0 + 1)) + 0;
+            let randomXVec = Math.floor(Math.random() * (2 - 0 + 1)) + .3;
             randomXVec *= Math.floor(Math.random()*2) == 1 ? 1 : -1;
-            let randomYVec = Math.floor(Math.random() * (2 - 0 + 1)) + 0;
+            let randomYVec = Math.floor(Math.random() * (2 - 0 + 1)) + .3;
             randomYVec *= Math.floor(Math.random()*2) == 1 ? 1 : -1;
             gate.pos = initializePosition(randomXVal, randomYVal, 5);
             gate.sprite = initializeSprite("./data/textures/gate.png", this.gameScene, 2);
@@ -153,7 +153,7 @@ export class GameState extends BaseState {
     private setUpEnemySpawner(xPos: number, yPos: number, player: Entity) {
         let spawner = new Entity();
 
-        spawner.spawner = { spawnEntity: (): Entity => {
+        spawner.spawner = { randomNumber: 750, spawnEntity: (): Entity => {
             let enemy = new Entity();
             enemy.pos = initializePosition(xPos, yPos, 4);
             enemy.vel = initializeVelocity(4);

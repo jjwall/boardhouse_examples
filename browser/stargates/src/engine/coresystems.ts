@@ -129,7 +129,7 @@ export function spawnerSystem(ents: ReadonlyArray<Entity>, state: BaseState) {
     ents.forEach(ent => {
         if (ent.spawner) {
             // update random number somewhere...
-            const randomNum = Math.floor(Math.random() * (750 - 0 + 1)) + 0;
+            const randomNum = Math.floor(Math.random() * (ent.spawner.randomNumber - 0 + 1)) + 0;
 
             if (randomNum === 15 || randomNum === 67) {
                 state.registerEntity(ent.spawner.spawnEntity());
