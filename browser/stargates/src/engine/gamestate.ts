@@ -10,11 +10,11 @@ import { BaseState } from "../basestate";
 import { Widget } from "../ui/widget";
 import { createWidget } from "../ui/widget";
 import { layoutWidget } from "../ui/layoutwidget";
-import { renderGameUi, Root } from "./rootgameui";
+import { renderGameUi, GameRoot } from "./rootgameui";
 
-// TODO: Add scoring and health HP UI
+// TODO: (done) Add scoring and health HP UI
 // TODO: Make better assets
-// TODO: Make lose screen
+// TODO: Make lose screen and lose conditions
 // TODO: Add background
 
 /**
@@ -26,7 +26,7 @@ export class GameState extends BaseState {
     public uiScene: Scene;
     public uiCamera: Camera;
     public rootWidget: Widget;
-    public rootComponent: Root;
+    public rootComponent: GameRoot;
     constructor(stateStack: BaseState[]) {
         super(stateStack);
         // Set up game scene.
@@ -128,7 +128,6 @@ export class GameState extends BaseState {
             enemy.pos = initializePosition(xPos, yPos, 4);
             enemy.vel = initializeVelocity(4);
             enemy.sprite = initializeSprite("./data/textures/enemy.png", this.gameScene, 2);
-            // enemy.hitBox = initializeHitBox(enemy.sprite, [HurtBoxTypes.test], 50, 50, 100, 200);
             enemy.hitBox = initializeHitBox(enemy.sprite, [HurtBoxTypes.player]);
             enemy.hurtBox = initializeHurtBox(enemy.sprite, HurtBoxTypes.enemy);
             enemy.followsEntity = { entityToFollow: player };
