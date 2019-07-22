@@ -81,6 +81,26 @@ export function positionSystem(ents: ReadonlyArray<Entity>) {
         if (ent.sprite && ent.pos) {
             ent.sprite.position.copy(ent.pos.loc);
             ent.sprite.rotation.set(0, 0, Math.atan2(ent.pos.dir.y, ent.pos.dir.x));
+
+            if (ent.pos.loc.y > 720) {
+                ent.pos.loc.y = 0;
+                ent.sprite.position.copy(ent.pos.loc);
+            }
+
+            if (ent.pos.loc.x > 1280) {
+                ent.pos.loc.x = 0;
+                ent.sprite.position.copy(ent.pos.loc);
+            }
+
+            if (ent.pos.loc.y < 0) {
+                ent.pos.loc.y = 720;
+                ent.sprite.position.copy(ent.pos.loc);
+            }
+
+            if (ent.pos.loc.x < 0) {
+                ent.pos.loc.x = 1280;
+                ent.sprite.position.copy(ent.pos.loc);
+            }
         }
     });
 }
