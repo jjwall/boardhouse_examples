@@ -130,6 +130,7 @@ export class GameState extends BaseState {
                 explosion.pos = gate.pos;
                 explosion.sprite = initializeSprite("./data/textures/explosion.png", this.gameScene, 2);
                 explosion.hitBox = initializeHitBox(explosion.sprite, [HurtBoxTypes.enemy]);
+                this.screenShake();
                 explosion.timer = initializeTimer(25, () => {
                     this.removeEntity(explosion);
                     // Remove Explosion from scene.
@@ -177,6 +178,23 @@ export class GameState extends BaseState {
         }};
 
         this.registerEntity(spawner);
+    }
+
+    private screenShake() {
+        for (let i = 1; i < 10; i++) {
+            let randomYVal = Math.floor(Math.random() * (8 - 0 + 1)) + 0;
+            let randomXVal = Math.floor(Math.random() * (8 - 0 + 1)) + 0;
+            randomYVal *= Math.floor(Math.random()*2) == 1 ? 1 : -1;
+            randomXVal *= Math.floor(Math.random()*2) == 1 ? 1 : -1;
+            this.gameCamera.translateX(randomXVal);
+            this.gameCamera.translateY(randomYVal);
+            let timer = new Entity();
+            timer.timer = initializeTimer(2 * i, () => {
+                this.gameCamera.translateX(randomXVal * -1);
+                this.gameCamera.translateY(randomYVal * -1);
+            });
+            this.registerEntity(timer);
+        }
     }
 
     public update() : void {

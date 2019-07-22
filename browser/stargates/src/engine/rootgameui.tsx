@@ -79,15 +79,21 @@ export class Root extends Component<Props, State> {
 
     render(): JSXElement {
         return(
-            <Test ticks = {this.state.ticks}
-                clicks = {this.state.clicks}
-                color = {this.state.color}
-                hidden = {this.state.hidden}
-                hover = {this.hover}
-                plunge = {this.plunge}
-                addClick = {this.addClick}
-                toggle = {this.toggle}
-            />
+            // <Test ticks = {this.state.ticks}
+            //     clicks = {this.state.clicks}
+            //     color = {this.state.color}
+            //     hidden = {this.state.hidden}
+            //     hover = {this.hover}
+            //     plunge = {this.plunge}
+            //     addClick = {this.addClick}
+            //     toggle = {this.toggle}
+            // />
+            <panel>
+                <panel>
+                    <label contents="Score:" top="50" left="50"></label>
+                    <label contents={" " + this.state.ticks} top="75" left="40"></label>
+                </panel>
+            </panel>
         )
     }
 }
