@@ -25,19 +25,23 @@ interface State {
     clicks: number;
     color: string;
     hidden: boolean;
+    score: number;
+    playerHealth: number;
 }
 
 export class Root extends Component<Props, State> {
     constructor(props: Props, scene: Scene) {
         super(props, scene);
-        this.state = { 
+        this.state = {
+            score: 0,
+            playerHealth: 100,
             ticks: 50, 
             clicks: 0, 
             color: "#00FFFF",
             hidden: false,
         };
 
-        setInterval(() => this.tick(), 1000);
+        setInterval(() => this.addHealth(), 1000);
     }
 
     public addClick = (): void => {
@@ -46,10 +50,30 @@ export class Root extends Component<Props, State> {
         });
     }
 
-    public tick = (): void => {
+    public addScoreFromGate = (): void => {
         this.setState({
-            ticks: this.state.ticks + 1
+            score: this.state.score + 100
         });
+    }
+
+    public addScoreFromEnemyKill = (): void => {
+        this.setState({
+            score: this.state.score + 50
+        });
+    }
+
+    public subtractPlayerHealth = (): void => {
+        this.setState({
+            playerHealth: this.state.playerHealth - 1
+        });
+    }
+
+    public addHealth = (): void => {
+        if (this.state.playerHealth < 100) {
+            this.setState({
+                playerHealth: this.state.playerHealth + 1
+            });
+        }
     }
 
     public hover = (): void => {
@@ -91,7 +115,9 @@ export class Root extends Component<Props, State> {
             <panel>
                 <panel>
                     <label contents="Score:" top="50" left="50"></label>
-                    <label contents={" " + this.state.ticks} top="75" left="40"></label>
+                    <label contents={" " + this.state.score} color="#0000FF" top="75" left="40"></label>
+                    <label contents="Health:" top="100" left="50"></label>
+                    <label contents={" " + this.state.playerHealth} color="#FF0000" top="125" left="40"></label>
                 </panel>
             </panel>
         )
