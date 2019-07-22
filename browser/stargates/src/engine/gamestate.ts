@@ -11,6 +11,7 @@ import { Widget } from "../ui/widget";
 import { createWidget } from "../ui/widget";
 import { layoutWidget } from "../ui/layoutwidget";
 import { renderGameUi, GameRoot } from "./rootgameui";
+import { LoseState } from "./losestate";
 
 // TODO: (done) Add scoring and health HP UI
 // TODO: Make better assets
@@ -134,6 +135,7 @@ export class GameState extends BaseState {
             // setHitBoxGraphic(enemy.sprite, enemy.hitBox);
             enemy.hitBox.onHit = () => {
                 this.rootComponent.subtractPlayerHealth();
+                this.pushLoseState();
             }
             enemy.hurtBox.onHurt = () => {
                 this.removeEntity(enemy);
@@ -163,6 +165,11 @@ export class GameState extends BaseState {
             });
             this.registerEntity(timer);
         }
+    }
+
+    public pushLoseState() {
+        let loseState = new LoseState(this.stateStack, this.rootComponent.state.score);
+        this.stateStack.push(loseState);
     }
 
     public update() : void {
