@@ -45,7 +45,7 @@ export class GameState extends BaseState {
 
         // Set up ui widget and instance.
         this.rootWidget = createWidget("root");
-        this.rootComponent = renderGameUi(this.uiScene, this.rootWidget);
+        this.rootComponent = renderGameUi(this.uiScene, this.rootWidget, this.pushLoseState);
 
         // Register systems.
         this.registerSystem(controlSystem, "control");
@@ -135,7 +135,7 @@ export class GameState extends BaseState {
             // setHitBoxGraphic(enemy.sprite, enemy.hitBox);
             enemy.hitBox.onHit = () => {
                 this.rootComponent.subtractPlayerHealth();
-                this.pushLoseState();
+                //this.pushLoseState();
             }
             enemy.hurtBox.onHurt = () => {
                 this.removeEntity(enemy);
@@ -167,7 +167,7 @@ export class GameState extends BaseState {
         }
     }
 
-    public pushLoseState() {
+    public pushLoseState = (): void => {
         let loseState = new LoseState(this.stateStack, this.rootComponent.state.score);
         this.stateStack.push(loseState);
     }

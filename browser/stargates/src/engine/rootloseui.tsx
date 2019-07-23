@@ -60,7 +60,7 @@ export class LoseRoot extends Component<Props, State> {
         return(
             <panel>
                 <label contents="Score:" top="290" left="640"></label>
-                <label contents={" " + this.props.score} color="#0000FF" top="265" left="640"></label>
+                <label contents={" " + this.props.score} color="#0000FF" top="315" left="630"></label>
                 <panel height="70" width="300" color={this.state.panelColor} top="360" left="640"
                     onHover={() => this.hover()}
                     onPlunge={() => this.plunge()}

@@ -6,13 +6,15 @@ import { Scene } from "THREE";
 import { Widget } from "../ui/widget";
 import { Component } from "../ui/component";
 
-export function renderGameUi(scene: Scene, rootWidget: Widget): GameRoot {
-    let rootInstance = renderWidget(<GameRoot />, rootWidget, scene);
+export function renderGameUi(scene: Scene, rootWidget: Widget, pushLoseState: () => void): GameRoot {
+    let rootInstance = renderWidget(<GameRoot pushLoseState = {pushLoseState} />, rootWidget, scene);
 
     return rootInstance.component as GameRoot;
 }
 
-interface Props {}
+interface Props {
+    pushLoseState: () => void;
+}
 
 interface State {
     score: number;
@@ -46,6 +48,10 @@ export class GameRoot extends Component<Props, State> {
         this.setState({
             playerHealth: this.state.playerHealth - 1
         });
+
+        if (this.state.playerHealth <= 0) {
+            this.triggerPushLoseState();
+        }
     }
 
     public addHealth = (): void => {
@@ -54,6 +60,10 @@ export class GameRoot extends Component<Props, State> {
                 playerHealth: this.state.playerHealth + 1
             });
         }
+    }
+
+    public triggerPushLoseState() {
+        this.props.pushLoseState();
     }
 
     render(): JSXElement {
